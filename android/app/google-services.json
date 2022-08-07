@@ -1,63 +1,49 @@
 {
   "project_info": {
-    "project_number": "874868803867",
-    "project_id": "nmap-personal",
-    "storage_bucket": "nmap-personal.appspot.com"
+    "project_number": "711318654331",
+    "project_id": "nmappersonal",
+    "storage_bucket": "nmappersonal.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:874868803867:android:65b15ae8ddb8f78b606bbe",
+        "mobilesdk_app_id": "1:711318654331:android:add64d8e9a78b79e11c1de",
         "android_client_info": {
           "package_name": "com.example.nmap_personal"
         }
       },
       "oauth_client": [
         {
-          "client_id": "874868803867-e8ue8veqkunql3f8eeuuqlat84qh5jti.apps.googleusercontent.com",
+          "client_id": "711318654331-evfvessdshspvt3olo6i75bcpepjsmp9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.nmap_personal",
+            "certificate_hash": "5a424a5ce542df931c1b319f96f2a4cae1b0fce0"
+          }
+        },
+        {
+          "client_id": "711318654331-4fv0lcljrcmr49r8n4pd9dna51321v9k.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAPe4t3BzI5ADAjIE3SvdxvJXB4KXRDt_g"
+          "current_key": "AIzaSyCQ-9E-PdnUrgo5h4kbI03l9washdn2Oa0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "874868803867-e8ue8veqkunql3f8eeuuqlat84qh5jti.apps.googleusercontent.com",
+              "client_id": "711318654331-4fv0lcljrcmr49r8n4pd9dna51321v9k.apps.googleusercontent.com",
               "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:874868803867:android:da7406c46e2bda93606bbe",
-        "android_client_info": {
-          "package_name": "com.example.sign_in_and_out"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "874868803867-e8ue8veqkunql3f8eeuuqlat84qh5jti.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAPe4t3BzI5ADAjIE3SvdxvJXB4KXRDt_g"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
+            },
             {
-              "client_id": "874868803867-e8ue8veqkunql3f8eeuuqlat84qh5jti.apps.googleusercontent.com",
-              "client_type": 3
+              "client_id": "711318654331-9vmqtcgdp6ir8b7f86dj4uiemrkjl5t4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.nmapPersonal"
+              }
             }
           ]
         }

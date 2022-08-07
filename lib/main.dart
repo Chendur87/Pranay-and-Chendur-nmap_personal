@@ -8,9 +8,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // We import our other projects so we can use them
 import 'package:nmap_personal/auth_page.dart';
+import 'google_sign_in.dart';
 import 'package:nmap_personal/utils.dart';
 import 'package:nmap_personal/verify_email_page.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:nmap_personal/utils/user_preferences.dart';
 
@@ -38,21 +40,25 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of our application.
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        // The messanger key is for us to display messages through Utils.showSnackBar
-        scaffoldMessengerKey: Utils.messengerKey,
-        navigatorKey: navigatorKey,
-        title: title,
-        debugShowCheckedModeBanner: false,
-        // Our theme is dark with green as our primary color and tealAccent is our secondary color
-        theme: ThemeData.dark().copyWith(
-          colorScheme:
-              ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
-            secondary: Colors.grey.shade300,
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+        // This is so our app creates the popup when we try and use google to sign in
+        create: (context) => GoogleSignInProvider(),
+        child: MaterialApp(
+          // The messanger key is for us to display messages through Utils.showSnackBar
+          scaffoldMessengerKey: Utils.messengerKey,
+          navigatorKey: navigatorKey,
+          title: title,
+          debugShowCheckedModeBanner: false,
+          // Our theme is dark with green as our primary color and tealAccent is our secondary color
+          theme: ThemeData.dark().copyWith(
+            colorScheme:
+                ColorScheme.fromSwatch(primarySwatch: Colors.blue).copyWith(
+              secondary: Colors.grey.shade300,
+            ),
           ),
+          // We construct our main page
+          home: const MainPage(),
         ),
-        // We construct our main page
-        home: const MainPage(),
       );
 }
 

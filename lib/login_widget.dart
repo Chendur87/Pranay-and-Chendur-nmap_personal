@@ -5,6 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 // Here we import flutter material for google style widgets and gestures to use gesture detector
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'google_sign_in.dart';
+import 'package:provider/provider.dart';
 // We import our other pages so our login page can call their methods
 import 'forgot_password_page.dart';
 import 'main.dart';
@@ -90,6 +93,27 @@ class _LoginWidgetState extends State<LogInWidget> {
               ),
               // When it's pressed, we call our signIn method
               onPressed: signIn,
+            ),
+            SizedBox(height: 24),
+            // Google Sign Up Button
+            ElevatedButton.icon(
+              // Makes button white
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white,
+                onPrimary: Colors.black,
+                minimumSize: Size(double.infinity, 50),
+              ),
+              // Makes google icon and makes it red
+              icon: FaIcon(FontAwesomeIcons.google, color: Colors.red),
+              // Button label
+              label: Text("Sign In with Google"),
+              onPressed: () {
+                // When pressed we create an instance of our google sign in class and then ask it
+                // to log in
+                final provider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.googleLogin();
+              },
             ),
             SizedBox(height: 24),
             // Our gesture detector to move to our forgot password page
