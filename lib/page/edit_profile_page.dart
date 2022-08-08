@@ -59,9 +59,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     await ImagePicker().pickImage(source: ImageSource.gallery);
                 // don't continue if user didn't select any image
                 if (image == null) return;
-
+                final uploadName = 'images/${user.uid}profilepic.jpg';
                 Reference ref =
-                    FirebaseStorage.instance.ref().child("profilepic.jpg");
+                    FirebaseStorage.instance.ref().child(uploadName);
                 await ref.putFile(File(image.path));
                 ref.getDownloadURL().then((value) {
                   user.updatePhotoURL(value);
@@ -90,9 +90,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 // once all of our stages
                 await user.reload();
                 user = await FirebaseAuth.instance.currentUser!;
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                    (Route<dynamic> route) => false);
+                Navigator.of(context).pop();
               },
             ),
           ],
