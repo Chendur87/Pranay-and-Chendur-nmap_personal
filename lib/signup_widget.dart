@@ -194,6 +194,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 // ignore_for_file: prefer_const_constructors
 // We import our firebase auth and email validator stuff for sign in
 import 'dart:async'; // new
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // Below used for flutter widgets and gesture detector
@@ -382,6 +383,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
         //get updated user
         await user.reload();
         user = await FirebaseAuth.instance.currentUser;
+        addUserDetails(user!);
       }
     } on FirebaseAuthException catch (e) {
       // Show errors through snack bar
@@ -389,5 +391,13 @@ class _SignUpWidgetState extends State<SignUpWidget> {
     }
     // We move to verify email page
     navigatorKey.currentState!.popUntil((route) => route.isFirst);
+  }
+
+  Future addUserDetails(User user) async {
+    await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+      'name': user.displayName!,
+      'email': user.email!,
+      'photoURL': user.photoURL!,
+    });
   }
 }

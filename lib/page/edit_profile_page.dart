@@ -27,7 +27,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
   // the getUser() method gets all of the data we need of a user
   User user = FirebaseAuth.instance.currentUser!;
 
-  //final Storage storage = Storage();
+  Future addUserDetails(User user) async {
+    await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+      'name': user.displayName!,
+      'email': user.email!,
+      'photoURL': user.photoURL!,
+    });
+  }
 
   // overall big widget that holds the editprofilepage
   @override
@@ -90,6 +96,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 // once all of our stages
                 await user.reload();
                 user = await FirebaseAuth.instance.currentUser!;
+                addUserDetails(user);
                 Navigator.of(context).pop();
               },
             ),
