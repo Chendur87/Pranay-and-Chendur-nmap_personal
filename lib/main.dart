@@ -14,7 +14,6 @@ import 'package:nmap_personal/verify_email_page.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'package:nmap_personal/utils/user_preferences.dart';
 
 Future main() async {
   // We set up Firebase and then run our app
@@ -25,7 +24,6 @@ Future main() async {
     DeviceOrientation.portraitDown,
   ]);
 
-  await UserPreferences.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }

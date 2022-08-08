@@ -3,9 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nmap_personal/google_sign_in.dart';
-import 'package:nmap_personal/model/user.dart';
 import 'package:nmap_personal/page/edit_profile_page.dart';
-import 'package:nmap_personal/utils/user_preferences.dart';
 import 'package:nmap_personal/widget/appbar_widget.dart';
 import 'package:nmap_personal/widget/button_widget.dart';
 import 'package:nmap_personal/widget/numbers_widget.dart';
@@ -22,8 +20,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final user = UserPreferences.getUser();
-    final firebaseUser = FirebaseAuth.instance.currentUser!;
+    final user = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(
       appBar: AppBar(
@@ -40,9 +37,10 @@ class _HomePageState extends State<HomePage> {
         physics: BouncingScrollPhysics(),
         children: [
           ProfileWidget(
-            imagePath: user.imagePath,
+            imagePath: user.photoURL!,
             onClicked: () async {
-              await Navigator.of(context).push(
+              await Navigator.push(
+                context,
                 MaterialPageRoute(builder: (context) => EditProfilePage()),
               );
               setState(() {});
@@ -51,54 +49,32 @@ class _HomePageState extends State<HomePage> {
           const SizedBox(height: 24),
           buildName(user),
           const SizedBox(height: 24),
-          Center(child: buildUpgradeButton(context)),
-          /*const SizedBox(height: 24),
-          NumbersWidget(),
-          const SizedBox(height: 48),
-          buildAbout(user), */
+          Center(child: buildClassesButton(context)),
         ],
       ),
     );
   }
 
-  Widget buildName(MyUser user) => Column(
+  Widget buildName(User user) => Column(
         children: [
           Text(
-            user.name,
+            user.displayName!,
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
           const SizedBox(height: 4),
           Text(
-            user.email,
+            user.email!,
             style: TextStyle(color: Colors.grey),
           )
         ],
       );
 
-  Widget buildUpgradeButton(BuildContext context) => ButtonWidget(
+  Widget buildClassesButton(BuildContext context) => ButtonWidget(
         text: "CLASSES!",
         onClicked: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const ClassesPage()),
           );
         },
-      );
-
-  Widget buildAbout(MyUser user) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'About',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              user.about,
-              style: TextStyle(fontSize: 16, height: 1.4),
-            ),
-          ],
-        ),
       );
 }
