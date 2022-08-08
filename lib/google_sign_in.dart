@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 // We import the proper firebase auth files
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // Here we import flutter material for google style widgets and gestures to use gesture detector
 import 'package:flutter/material.dart';
 // Then we import the below to sign in with google
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nmap_personal/signup_widget.dart';
 import 'package:nmap_personal/utils.dart';
 
 // We create our google login provider class
@@ -31,6 +33,7 @@ class GoogleSignInProvider extends ChangeNotifier {
       );
       // And here we use firebase to sign in with those credentials
       await FirebaseAuth.instance.signInWithCredential(credential);
+      addUserDetails(FirebaseAuth.instance.currentUser!);
       // We notify our listneers we signed in
       notifyListeners();
     }
@@ -38,6 +41,14 @@ class GoogleSignInProvider extends ChangeNotifier {
     catch (e) {
       Utils.showSnackBar(e.toString());
     }
+  }
+
+  Future addUserDetails(User user) async {
+    await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+      'name': user.displayName!,
+      'email': user.email!,
+      'photoURL': user.photoURL!,
+    });
   }
 
   // Here we logout the current user
