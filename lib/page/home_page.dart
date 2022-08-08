@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nmap_personal/google_sign_in.dart';
 import 'package:nmap_personal/model/user.dart';
 import 'package:nmap_personal/page/edit_profile_page.dart';
 import 'package:nmap_personal/utils/user_preferences.dart';
@@ -8,6 +11,8 @@ import 'package:nmap_personal/widget/button_widget.dart';
 import 'package:nmap_personal/widget/numbers_widget.dart';
 import 'package:nmap_personal/widget/profile_widget.dart';
 import 'package:nmap_personal/page/classes.dart';
+import 'package:provider/provider.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,9 +23,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final user = UserPreferences.getUser();
+    final firebaseUser = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(
-      appBar: buildAppBar(context),
+      appBar: AppBar(
+        leading: BackButton(
+            color: Colors.white,
+            onPressed: () {
+              final googleProvider =
+                  Provider.of<GoogleSignInProvider>(context, listen: false);
+              googleProvider.logout();
+            }),
+        backgroundColor: Colors.transparent,
+      ),
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
@@ -87,56 +102,3 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 }
-
-/*
-
-// ignore_for_file: prefer_const_constructors
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:nmap_personal/login_widget.dart';
-import 'package:provider/provider.dart';
-import 'dart:io';
-
-class HomePage extends StatelessWidget {
-  final user = FirebaseAuth.instance.currentUser!;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('Home'),
-        ),
-        body: Padding(
-            padding: EdgeInsets.all(32),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              SizedBox(height: 8),
-              Text(
-                "Hello ${user.displayName!}!",
-                style: TextStyle(fontSize: 30),
-              ),
-              SizedBox(height: 8),
-              Text(
-                'You are signed in as',
-                style: TextStyle(fontSize: 16),
-              ),
-              SizedBox(height: 8),
-              Text(user.email!,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              SizedBox(height: 40),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size.fromHeight(50),
-                ),
-                icon: Icon(Icons.arrow_back, size: 32),
-                label: Text(
-                  "Sign out",
-                  style: TextStyle(fontSize: 24),
-                ),
-                onPressed: () => FirebaseAuth.instance.signOut(),
-              ),
-            ])));
-  }
-} */
