@@ -228,6 +228,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
       'name': user.displayName!,
       'email': user.email!,
       'photoURL': user.photoURL!,
+      "provider": "email",
     });
   }
 }

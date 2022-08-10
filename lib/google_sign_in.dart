@@ -48,6 +48,7 @@ class GoogleSignInProvider extends ChangeNotifier {
       'name': user.displayName!,
       'email': user.email!,
       'photoURL': user.photoURL!,
+      "provider": "google",
     });
   }
 
@@ -57,5 +58,9 @@ class GoogleSignInProvider extends ChangeNotifier {
       await googleSignIn.disconnect();
     });
     FirebaseAuth.instance.signOut();
+  }
+
+  Future<bool> isGoogleUser() async {
+    return await googleSignIn.isSignedIn();
   }
 }
