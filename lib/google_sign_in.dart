@@ -58,4 +58,8 @@ class GoogleSignInProvider extends ChangeNotifier {
     });
     FirebaseAuth.instance.signOut();
   }
+
+  Future<bool> isGoogleUser() async {
+    return await googleSignIn.isSignedIn();
+  }
 }

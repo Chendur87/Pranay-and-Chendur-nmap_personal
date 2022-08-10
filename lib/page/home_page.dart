@@ -12,6 +12,8 @@ import 'package:nmap_personal/page/classes.dart';
 import 'package:provider/provider.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'messages.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -20,7 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser!;
+    var user = FirebaseAuth.instance.currentUser!;
 
     return Scaffold(
       appBar: AppBar(
@@ -39,8 +41,7 @@ class _HomePageState extends State<HomePage> {
           ProfileWidget(
             imagePath: user.photoURL!,
             onClicked: () async {
-              await Navigator.push(
-                context,
+              await Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => EditProfilePage()),
               );
               setState(() {});
@@ -50,6 +51,8 @@ class _HomePageState extends State<HomePage> {
           buildName(user),
           const SizedBox(height: 24),
           Center(child: buildClassesButton(context)),
+          const SizedBox(height: 24),
+          Center(child: buildMessagesButton(context)),
         ],
       ),
     );
@@ -70,10 +73,19 @@ class _HomePageState extends State<HomePage> {
       );
 
   Widget buildClassesButton(BuildContext context) => ButtonWidget(
-        text: "CLASSES!",
+        text: "Classes!",
         onClicked: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const ClassesPage()),
+          );
+        },
+      );
+
+  Widget buildMessagesButton(BuildContext context) => ButtonWidget(
+        text: "Messages!",
+        onClicked: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const MessagesPage()),
           );
         },
       );

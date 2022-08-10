@@ -14,6 +14,11 @@ import 'package:path/path.dart' as path;
 import 'dart:io';
 import 'package:nmap_personal/widget/button_widget.dart';
 import 'package:nmap_personal/storage.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../forgot_password_page.dart';
+import '../google_sign_in.dart';
 
 // This page is when the User wants to change the data presented on the profile page
 class EditProfilePage extends StatefulWidget {
@@ -25,7 +30,14 @@ class EditProfilePage extends StatefulWidget {
 // the state that is stored when changing the EditProfilePage
 class _EditProfilePageState extends State<EditProfilePage> {
   // the getUser() method gets all of the data we need of a user
-  User user = FirebaseAuth.instance.currentUser!;
+  late User user;
+
+  @override
+  void initState() {
+    super.initState();
+
+    user = FirebaseAuth.instance.currentUser!;
+  }
 
   Future addUserDetails(User user) async {
     await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
@@ -33,6 +45,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
       'email': user.email!,
       'photoURL': user.photoURL!,
     });
+  }
+
+  Future uploadImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    // don't continue if user didn't select any image
+    if (image == null) return;
+    final uploadName = 'images/${user.uid}profilepic.jpg';
+    Reference ref = FirebaseStorage.instance.ref().child(uploadName);
+    await ref.putFile(File(image.path));
+    ref.getDownloadURL().then((value) {
+      user.updatePhotoURL(value);
+    });
+    await user.reload();
   }
 
   // overall big widget that holds the editprofilepage
@@ -55,49 +80,51 @@ class _EditProfilePageState extends State<EditProfilePage> {
           children: [
             // we call our ProfileWidget to format our image
             ProfileWidget(
-              imagePath: user.photoURL!,
-              // we want to edit on this page
-              isEdit: true,
-              // this onClicked makes it so when you click on the image, a new image is stored in the image bubble
-              onClicked: () async {
-                // chose new image from photo gallery
-                final image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
-                // don't continue if user didn't select any image
-                if (image == null) return;
-                final uploadName = 'images/${user.uid}profilepic.jpg';
-                Reference ref =
-                    FirebaseStorage.instance.ref().child(uploadName);
-                await ref.putFile(File(image.path));
-                ref.getDownloadURL().then((value) {
-                  user.updatePhotoURL(value);
-                });
-                await user.reload();
-                user = await FirebaseAuth.instance.currentUser!;
-                setState(() {});
-              },
-            ),
+                imagePath: user.photoURL!,
+                // we want to edit on this page
+                isEdit: true,
+                // this onClicked makes it so when you click on the image, a new image is stored in the image bubble
+                onClicked: () {
+                  // chose new image from photo gallery
+                  uploadImage().then((value) {
+                    setState(() {
+                      user = FirebaseAuth.instance.currentUser!;
+                    });
+                  });
+                }),
             // The remain code are TextField widgets to change the name, email, and about section of the profile page
-            // The
             const SizedBox(height: 24),
             TextFieldWidget(
-                label: "Full Name",
-                text: user.displayName!,
-                onChanged: /*(name) => user = user.copy(name: name)*/
-                    (name) async {
-                  user.updateDisplayName(name);
-                  await user.reload();
-                  user = await FirebaseAuth.instance.currentUser!;
-                }),
+              label: "Full Name",
+              text: user.displayName!,
+              onChanged: /*(name) => user = user.copy(name: name)*/
+                  (name) async {
+                user.updateDisplayName(name);
+                await user.reload();
+                user = FirebaseAuth.instance.currentUser!;
+              },
+            ),
+            const SizedBox(height: 24),
+            ButtonWidget(
+              text: 'Change Password',
+              onClicked: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ForgotPasswordPage()));
+              },
+            ),
             const SizedBox(height: 24),
             ButtonWidget(
               text: 'Save',
               onClicked: () async {
                 // once all of our stages
                 await user.reload();
-                user = await FirebaseAuth.instance.currentUser!;
-                addUserDetails(user);
-                Navigator.of(context).pop();
+                user = FirebaseAuth.instance.currentUser!;
+                addUserDetails(user).then((value) {
+                  setState(() {
+                    user = FirebaseAuth.instance.currentUser!;
+                  });
+                  Navigator.of(context).pop();
+                });
               },
             ),
           ],
