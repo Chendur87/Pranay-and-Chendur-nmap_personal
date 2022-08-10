@@ -48,7 +48,6 @@ class GoogleSignInProvider extends ChangeNotifier {
       'name': user.displayName!,
       'email': user.email!,
       'photoURL': user.photoURL!,
-      "provider": "google",
     });
   }
 
